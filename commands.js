@@ -23,12 +23,22 @@ module.exports = {
 		}
 	},
 
-	identifyYourself()
+	identify()
 	{
 		for(let name in Game.creeps)
 		{
 			var creep = Game.creeps[name]
 			creep.say(creep.memory.role)
+		}
+	},
+
+	identify(roleName)
+	{
+		for(let name in Game.creeps)
+		{
+			var creep = Game.creeps[name]
+			if(creep.memory.role == roleName)
+				creep.say(creep.memory.role)
 		}
 	}
 }

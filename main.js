@@ -2,7 +2,7 @@ upkeep = require('upkeep')
 role = require('role')
 command = require('commands')
 
-const rolesInProduction = ['miner', 'cable', 'builder', 'upgrader']
+const rolesInProduction = ['miner', 'cable', 'builder', 'upgrader', 'repairman']
 
 module.exports.loop = function() {
     for(let name in Game.creeps)
@@ -16,10 +16,10 @@ module.exports.loop = function() {
 
 function upkeepSpawn()
 {
-    for(let role of rolesInProduction)
+    for(let roleName of rolesInProduction)
     {
-        var numActive = _.filter(Game.creeps, (creep) => creep.memory.role == role).length
-        if(numActive < 5)
-            upkeep.spawn(role)
+        var numActive = _.filter(Game.creeps, (creep) => creep.memory.role == roleName).length
+        if(numActive < role[roleName].maxUnits)
+            upkeep.spawn(roleName)
     }
 }

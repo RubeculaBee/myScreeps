@@ -11,16 +11,17 @@ module.exports = {
                 if (sources[i].energy > mostSource.energy)
                     mostSource = sources[i]
             creep.memory.target = mostSource.id
+
+            return ERR_NOT_FOUND
         }
         else
         {
             creep.say("⛏️!")
             if(creep.harvest(Game.getObjectById(creep.memory.target)) == ERR_NOT_IN_RANGE)
-                creep.moveTo(Game.getObjectById(creep.memory.target), {visualizePathStyle: {}, maxRooms: 1})
+                return creep.moveTo(Game.getObjectById(creep.memory.target), {visualizePathStyle: {}, maxRooms: 1})
+            else
+                return OK
         }
-
-        if(Game.getObjectById(creep.memory.target).energy == 0)
-            creep.memory.target = null
     },
 
     grabEnergy(creep)
@@ -59,17 +60,50 @@ module.exports = {
 
     build(creep)
     {
-        creep.say("🛠️!")
-        var site = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
+        var site = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES)
+        if(site == null)
+            return ERR_NOT_FOUND
 
+        creep.say("🛠️!")
         if(creep.build(site) == ERR_NOT_IN_RANGE)
-            creep.moveTo(site, {visualizePathStyle: {}, maxRooms: 1})
+            creep.moveTo(site, {visualizePathStyle: {}})
+
+        return OK
+    },
+
+    repair(creep)
+    {
+        var site = creep.room.find(FIND_STRUCTURES, {
+            filter: structure => {
+                return(structure.hits < structure.hitsMax/2)
+            }
+        })
+        if(site == '')
+            return ERR_NOT_FOUND
+
+        creep.say("🔧!")
+        if(creep.repair(site[0]) == ERR_NOT_IN_RANGE)
+            return creep.moveTo(site[0], {visualizePathStyle: {}})
+
+        return OK
     },
 
     upgrade(creep)
     {
         creep.say("🆙!")
         if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE)
-            creep.moveTo(creep.room.controller, {visualizePathStyle: {}, maxRooms: 1})
+            creep.moveTo(creep.room.controller, {visualizePathStyle: {}})
+    },
+
+    goHome(creep)
+    {
+        creep.say("🏠")
+        creep.moveTo(Game.spawns['spCentral'])
+    },
+
+    manifestDestiny(creep)
+    {
+        if(creep.room.name != Memory.goals.destiny)
+        {}
     }
 };
