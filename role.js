@@ -1,7 +1,19 @@
 actions = require('actions')
 
+module.exports = {
+	inProduction: ['miner', 'cable', 'builder', 'upgrader', 'repairman', 'coloniser'],
+	roleParts : {
+		'miner': [WORK, WORK, WORK, WORK, WORK, MOVE],
+		'cable': [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+		'builder': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+		'upgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+		'repairman': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+		'coloniser': [MOVE, MOVE, CLAIM, CLAIM, CLAIM, CLAIM]
+	}
+}
+
 module.exports.miner = {
-	maxUnits: 8,
+	maxUnits: 5,
 	run(creep)
 	{
 		const CHANGE_TARGET_AFTER = 5
@@ -24,7 +36,7 @@ module.exports.cable = {
 }
 
 module.exports.builder = {
-	maxUnits: 5,
+	maxUnits: 4,
 	run(creep)
 	{
 		if(creep.store.getUsedCapacity() == 0)
@@ -40,7 +52,7 @@ module.exports.builder = {
 }
 
 module.exports.upgrader = {
-	maxUnits: 5,
+	maxUnits: 4,
 	run(creep)
 	{
 		if(creep.store.getUsedCapacity() == 0)
@@ -56,7 +68,7 @@ module.exports.upgrader = {
 }
 
 module.exports.repairman = {
-	maxUnits: 3,
+	maxUnits: 2,
 	run(creep)
 	{
 		if(creep.store.getUsedCapacity() == 0)
@@ -68,5 +80,13 @@ module.exports.repairman = {
             actions.grabEnergy(creep)
         else if(actions.repair(creep) != OK)
 			actions.goHome(creep)
+	}
+}
+
+module.exports.coloniser = {
+	maxUnits: 3,
+	run(creep)
+	{
+		actions.manifestDestiny(creep)
 	}
 }

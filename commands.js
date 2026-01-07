@@ -1,3 +1,5 @@
+role = require('role')
+
 module.exports = {
 	forgetDead()
 	{
@@ -23,7 +25,7 @@ module.exports = {
 		}
 	},
 
-	identify()
+	identifyAll()
 	{
 		for(let name in Game.creeps)
 		{
@@ -40,5 +42,35 @@ module.exports = {
 			if(creep.memory.role == roleName)
 				creep.say(creep.memory.role)
 		}
+	},
+
+	viewCosts()
+	{
+		console.log('----- Parts -----')
+		for(let part in BODYPART_COST)
+			console.log(`${part}: ${BODYPART_COST[part]}`)
+		
+		console.log('----- Roles -----')
+		for(let roleName in role.roleParts)
+		{
+			let sum = 0
+			for(let part of role.roleParts[roleName])
+				sum += BODYPART_COST[part]
+
+			console.log(`${roleName}: ${sum}`)
+		}
+	},
+
+	viewCost(roleName)
+	{
+		console.log('----- Parts -----')
+		for(let part in BODYPART_COST)
+			console.log(`${part}: ${BODYPART_COST[part]}`)
+		
+		console.log('----- Roles -----')
+		let sum = 0
+		for(let part of role.roleParts[roleName])
+			sum += BODYPART_COST[part]
+		console.log(`${roleName}: ${sum}`)
 	}
 }

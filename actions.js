@@ -103,7 +103,12 @@ module.exports = {
 
     manifestDestiny(creep)
     {
-        if(creep.room.name != Memory.goals.destiny)
-        {}
+        var destiny = Game.getObjectById(Memory.goals.destiny)
+
+        if(creep.claimController(destiny) == ERR_GCL_NOT_ENOUGH)
+            if(creep.reserveController(destiny) == ERR_NOT_IN_RANGE)
+                creep.moveTo(destiny)
+        else if (creep.claimController(destiny) == ERR_NOT_IN_RANGE)
+            creep.moveTo(destiny)
     }
 };

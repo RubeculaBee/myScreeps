@@ -1,21 +1,15 @@
-var roleParts = {
-    'miner': [WORK, WORK, WORK, WORK, WORK, MOVE],
-    'cable': [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-	'builder': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-	'upgrader': [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-	'repairman': [WORK, WORK, CARRY, CARRY, MOVE, MOVE]
-}
+role = require('role')
 
 module.exports = {
-	spawn(role)
+	spawn(roleName)
 	{
-		if(Memory.creepsCreated[role] == null)
-			Memory.creepsCreated[role] = 0
+		if(Memory.creepsCreated[roleName] == null)
+			Memory.creepsCreated[roleName] = 0
 
 		var spawner = Game.spawns['spCentral']
-        var name = role + (Memory.creepsCreated[role] + 1)
+        var name = roleName + (Memory.creepsCreated[roleName] + 1)
         
-        if(spawner.spawnCreep(roleParts[role], name, {memory: {role: role, inactivityTimer: 0}}) == 0)
-            Memory.creepsCreated[role]++;
+        if(spawner.spawnCreep(role.roleParts[roleName], name, {memory: {role: roleName, inactivityTimer: 0}}) == 0)
+            Memory.creepsCreated[roleName]++;
 	}
 }
